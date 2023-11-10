@@ -8,17 +8,21 @@ import {
   updateDoc,
   getDocs,
   query,
+  onSnapshot
 } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
 import Board from "./Board";
 
-const Game = ({ route }) => {
-  const { gameId } = route.params;
+const Game = ({ route, navigation }) => {
+  const { gameId, playerIcon } = route.params;
+
+
   const ref = doc(db, "game", gameId);
 
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
+  const [playerTurned, setPlayerTurned] = useState("");
 
   const initialBoard = [
     ["", "", ""],
@@ -27,7 +31,6 @@ const Game = ({ route }) => {
   ];
 
   const [board, setBoard] = useState(initialBoard);
-  const [player, setPlayer] = useState("X");
   const [winner, setWinner] = useState("");
 
   useEffect(() => {
@@ -35,8 +38,14 @@ const Game = ({ route }) => {
   }, [board]);
 
   useEffect(() => {
-    fetchPlayers();
+    fetchData();
   }, []);
+
+  const fetchData = () => {
+    onSnapshot(collection(db, "game"), (snapshot) => {
+    fetchPlayers();  
+    });
+  };
 
   const fetchPlayers = async () => {
     const q = query(collection(db, "game"), where("gameId", "==", gameId));
@@ -44,25 +53,28 @@ const Game = ({ route }) => {
     querySnapshot.forEach((doc) => {
       setPlayer1(doc.data().player1);
       setPlayer2(doc.data().player2 ?? "");
+      setPlayerTurned(doc.data().player);
+      setBoard([doc.data().row0,
+        doc.data().row1,
+        doc.data().row2 ])
     });
   };
 
   const updateBoard = async (rowIndex, newBoard) => {
-    console.log(rowIndex);
     switch (rowIndex) {
       case 0:
         await updateDoc(ref, {
-          1: newBoard,
+          row0: newBoard,
         });
         break;
       case 1:
         await updateDoc(ref, {
-          2: newBoard,
+          row1: newBoard,
         });
         break;
       case 2:
         await updateDoc(ref, {
-          3: newBoard,
+          row2: newBoard,
         });
         break;
       default:
@@ -72,19 +84,20 @@ const Game = ({ route }) => {
 
   const playerTurn = async () => {
     await updateDoc(ref, {
-      player: player === "X" ? "O" : "X",
+      player: playerIcon === "X" ? "O" : "X",
     });
   };
 
   const handlePress = (rowIndex, cellIndex) => {
-    if (board[rowIndex][cellIndex] === "" && !winner) {
-      const newBoard = [...board];
-      newBoard[rowIndex][cellIndex] = player;
-      updateBoard(rowIndex, newBoard[rowIndex]);
-      setBoard(newBoard);
-      setPlayer(player === "X" ? "O" : "X");
-      playerTurn();
+    if ( playerIcon === playerTurned) {
+      if (board[rowIndex][cellIndex] === "" && !winner) {
+        const newBoard = [...board];
+        newBoard[rowIndex][cellIndex] = playerIcon;
+        updateBoard(rowIndex, newBoard[rowIndex]);
+        playerTurn();
+      }
     }
+    
   };
 
   const checkWinner = () => {
@@ -137,10 +150,14 @@ const Game = ({ route }) => {
   useEffect(() => {
     if (winner) {
       Alert.alert(`Player ${winner} won!`, " ", [
-        { text: "OK", onPress: resetBoard },
+        { text: "OK", onPress: closeGame },
       ]);
     }
   }, [winner]);
+
+  const closeGame = () => {
+    navigation.navigate("GameList");
+  }
 
   useEffect(() => {
     if (!winner) {

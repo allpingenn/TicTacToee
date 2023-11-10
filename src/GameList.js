@@ -40,8 +40,8 @@ const GameList = ({ navigation }) => {
     setGameData(datas);
   };
 
-  const goGame = (value) => {
-    navigation.navigate("Game", { gameId: value });
+  const goGame = (value, playerIcon) => {
+    navigation.navigate("Game", { gameId: value, playerIcon: playerIcon });
   };
 
   const createGame = async () => {
@@ -52,10 +52,11 @@ const GameList = ({ navigation }) => {
       const docRef = await addDoc(collection(db, "game"), {
         userId: userId,
         player1: username,
-        1: ["", "", ""],
-        2: ["", "", ""],
-        3: ["", "", ""],
+        row0: ["", "", ""],
+        row1: ["", "", ""],
+        row2: ["", "", ""],
         player: "X",
+        isGameOpen: true
       });
       const gameId = docRef.id;
       const ref = doc(db, "game", gameId);
@@ -63,8 +64,8 @@ const GameList = ({ navigation }) => {
       const updateTimestamp = await updateDoc(ref, {
         gameId: gameId,
       });
-
-      goGame(gameId);
+      const playerIcon = "X";
+      goGame(gameId,playerIcon);
     } catch (e) {
       console.log("error:", e);
     }
@@ -76,8 +77,10 @@ const GameList = ({ navigation }) => {
 
     const updateTimestamp = await updateDoc(docRef, {
       player2: username,
+      isGameOpen: false
     }).then(() => {
-      goGame(gameId);
+      const playerIcon = "O";
+      goGame(gameId,playerIcon);
     });
   };
 
@@ -93,8 +96,9 @@ const GameList = ({ navigation }) => {
               key={index}
               style={styles.cardContainer}
               onPress={() => {
-                joinGame(item.gameId);
-              }}
+                item.isGameOpen ? 
+                joinGame(item.gameId)
+              : null}}
             >
               <View style={styles.card}>
                 <View style={styles.gameTextContainer}>
