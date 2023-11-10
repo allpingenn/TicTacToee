@@ -6,7 +6,7 @@ import {
   ScrollView,
 } from "react-native";
 import React from "react";
-import { firebaseConfig, db } from "../firebaseConfig.js";
+import { firebaseConfig, db } from "../../firebaseConfig.js";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
@@ -52,6 +52,7 @@ const SignIn = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Welcome Tik Tak Toe</Text>
+      
       <TextInput
         style={styles.input}
         onChangeText={(value) => {
@@ -59,6 +60,7 @@ const SignIn = ({ navigation }) => {
         }}
         placeholder="username"
       />
+
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => {

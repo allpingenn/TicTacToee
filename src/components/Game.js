@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
-  addDoc,
   collection,
   doc,
   where,
@@ -10,9 +9,9 @@ import {
   query,
   onSnapshot
 } from "firebase/firestore";
-import { db } from "../firebaseConfig.js";
+import { db } from "../../firebaseConfig.js";
 
-import Board from "./Board";
+import Board from "./Board.js";
 
 const Game = ({ route, navigation }) => {
   const { gameId, playerIcon } = route.params;
@@ -176,11 +175,13 @@ const Game = ({ route, navigation }) => {
         { 
         playerTurned === "X" ? 
           <Text style={styles.arrowIcon}>{'<=='}</Text> 
+
         : <Text style={styles.arrowIcon}>{'==>'}</Text>
         }
         <Text style={styles.playersTitle}>{player2}</Text>
       </View>
       <Text style={styles.title}>Tic Tac Toe</Text>
+      
       <Board board={board} onPress={handlePress} />
     </View>
   );

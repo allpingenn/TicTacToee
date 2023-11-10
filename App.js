@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Game from "./src/Game";
-import SignIn from "./src/SignIn";
-import Splash from "./src/Splash";
-import GameList from "./src/GameList";
+import Game from "./src/components/Game";
+import SignIn from "./src/screens/SignIn";
+import Splash from "./src/screens/Splash";
+import GameList from "./src/screens/GameList";
 
 const Stack = createNativeStackNavigator();
 

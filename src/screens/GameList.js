@@ -14,7 +14,7 @@ import {
   updateDoc,
   getDocs,
 } from "firebase/firestore";
-import { db } from "../firebaseConfig.js";
+import { db } from "../../firebaseConfig.js";
 
 import React, { useEffect, useState } from "react";
 
@@ -61,7 +61,7 @@ const GameList = ({ navigation }) => {
       const gameId = docRef.id;
       const ref = doc(db, "game", gameId);
 
-      const updateTimestamp = await updateDoc(ref, {
+      await updateDoc(ref, {
         gameId: gameId,
       });
       const playerIcon = "X";
@@ -75,7 +75,7 @@ const GameList = ({ navigation }) => {
     const username = await AsyncStorage.getItem("username");
     const docRef = doc(db, "game", gameId);
 
-    const updateTimestamp = await updateDoc(docRef, {
+    await updateDoc(docRef, {
       player2: username,
       isGameOpen: false
     }).then(() => {
