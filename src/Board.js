@@ -32,6 +32,7 @@ export default Board
 const styles = StyleSheet.create({
     board: {
         marginTop: 20,
+        backgroundColor: '#A389D5'
     },
     row: {
         flexDirection: 'row',

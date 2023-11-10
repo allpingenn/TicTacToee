@@ -94,7 +94,7 @@ const GameList = ({ navigation }) => {
           {gameData.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.cardContainer}
+              style={[styles.cardContainer, { opacity: item.isGameOpen ? 1 : 0.5 }]}
               onPress={() => {
                 item.isGameOpen ? 
                 joinGame(item.gameId)
@@ -105,7 +105,6 @@ const GameList = ({ navigation }) => {
                   <Text style={styles.gameTextTitle}>{item.player1}</Text>
                   <Text style={styles.gameTextTitle}>{item.player2}</Text>
                 </View>
-
                 <Text style={styles.gameText}>{item.gameId}</Text>
               </View>
             </TouchableOpacity>

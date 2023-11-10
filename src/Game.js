@@ -143,7 +143,6 @@ const Game = ({ route, navigation }) => {
 
   const resetBoard = () => {
     setBoard(initialBoard);
-    setPlayer("X");
     setWinner("");
   };
 
@@ -174,6 +173,11 @@ const Game = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.playersContainer}>
         <Text style={styles.playersTitle}>{player1}</Text>
+        { 
+        playerTurned === "X" ? 
+          <Text style={styles.arrowIcon}>{'<=='}</Text> 
+        : <Text style={styles.arrowIcon}>{'==>'}</Text>
+        }
         <Text style={styles.playersTitle}>{player2}</Text>
       </View>
       <Text style={styles.title}>Tic Tac Toe</Text>
@@ -204,7 +208,12 @@ const styles = StyleSheet.create({
     top: 130,
   },
   playersTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
   },
+  arrowIcon: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#A389D5",
+  }
 });
